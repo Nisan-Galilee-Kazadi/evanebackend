@@ -4,7 +4,7 @@ const Order = require('../models/Order');
 const Event = require('../models/Event');
 const authMiddleware = require('../middleware/auth');
 const { generateToken } = require('../utils/tokenGenerator');
-const { sendTokenEmail, sendOrderConfirmationEmail } = require('../services/emailService');
+const { sendTokenEmail, sendOrderConfirmationEmail, sendAdminNotificationEmail } = require('../services/emailService');
 
 // Payment instructions mapping
 const paymentInstructions = {
@@ -106,17 +106,27 @@ router.post('/', async (req, res) => {
             <strong>4.</strong> Montant : <strong>${totalAmount} CDF</strong>
         `;
 
+        const baseOrderDetails = {
+            customerName,
+            customerEmail,
+            orderId: order._id.toString(),
+            eventTitle: event.title,
+            eventDate: new Date(event.date).toLocaleDateString('fr-FR'),
+            eventVenue: `${event.venue}, ${event.city}`,
+            totalAmount,
+            currency: 'CDF'
+        };
+
         // Send confirmation email if email provided
         if (customerEmail) {
-            const orderDetails = {
-                customerName,
-                eventTitle: event.title,
-                eventDate: new Date(event.date).toLocaleDateString('fr-FR'),
-                eventVenue: `${event.venue}, ${event.city}`,
-                totalAmount
-            };
+            await sendOrderConfirmationEmail(customerEmail, baseOrderDetails, instructionsText);
+        }
 
-            await sendOrderConfirmationEmail(customerEmail, orderDetails, instructionsText);
+        // Notify admin (best-effort). Do not block order creation if email fails.
+        try {
+            await sendAdminNotificationEmail(baseOrderDetails);
+        } catch (emailError) {
+            console.error('Admin notification email error:', emailError);
         }
 
         res.status(201).json({

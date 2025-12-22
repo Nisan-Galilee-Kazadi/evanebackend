@@ -13,6 +13,7 @@ const videoRoutes = require("./routes/videos");
 const mediaRoutes = require("./routes/media");
 
 const app = express();
+app.enable('trust proxy'); // Required for req.protocol to detect https on Render
 
 // Connect to MongoDB
 connectDB();
@@ -23,7 +24,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from public/media
-app.use('/media', express.static(path.join(__dirname, 'public', 'media')));
+app.use('/media', express.static(path.join(__dirname, 'public', 'media'), {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.set('Access-Control-Allow-Origin', '*');
+  }
+}));
 
 // Routes
 app.use("/api/auth", authRoutes);

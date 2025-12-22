@@ -20,6 +20,10 @@ const adminSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    photo: {
+        type: String,
+        default: ''
     }
 });
 

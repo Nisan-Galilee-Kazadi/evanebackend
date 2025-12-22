@@ -66,5 +66,51 @@ router.post('/verify', async (req, res) => {
         res.status(401).json({ message: 'Token invalide' });
     }
 });
+// @route   PUT /api/auth/profile
+// @desc    Update admin profile
+// @access  Private
+router.put('/profile', async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) return res.status(401).json({ message: 'Non autorisé' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const admin = await Admin.findById(decoded.id);
+
+        if (!admin) return res.status(404).json({ message: 'Admin non trouvé' });
+
+        const { name, email, photo, currentPassword, newPassword } = req.body;
+
+        if (name) admin.name = name;
+        if (email) admin.email = email;
+        if (photo) admin.photo = photo;
+
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ message: 'Mot de passe actuel requis' });
+            }
+            const isMatch = await admin.comparePassword(currentPassword);
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Mot de passe actuel incorrect' });
+            }
+            admin.password = newPassword;
+        }
+
+        await admin.save();
+
+        res.json({
+            message: 'Profil mis à jour',
+            admin: {
+                id: admin._id,
+                email: admin.email,
+                name: admin.name,
+                photo: admin.photo
+            }
+        });
+    } catch (error) {
+        console.error('Profile update error:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
 
 module.exports = router;

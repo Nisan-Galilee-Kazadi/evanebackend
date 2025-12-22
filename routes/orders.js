@@ -186,6 +186,35 @@ router.put('/:id/validate', authMiddleware, async (req, res) => {
     }
 });
 
+// @route   PUT /api/orders/:id/cancel
+// @desc    Cancel/revoke order access (admin)
+// @access  Private
+router.put('/:id/cancel', authMiddleware, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ message: 'Commande non trouvée' });
+        }
+
+        order.paymentStatus = 'cancelled';
+        order.token = undefined;
+        order.tokenUsed = false;
+        order.tokenUsedAt = undefined;
+        order.validatedAt = undefined;
+
+        await order.save();
+
+        res.json({
+            message: 'Commande annulée',
+            order
+        });
+    } catch (error) {
+        console.error('Cancel order error:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
 // @route   POST /api/orders/verify-token
 // @desc    Verify token and get ticket (public)
 // @access  Public

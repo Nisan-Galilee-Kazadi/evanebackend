@@ -9,6 +9,7 @@ const eventRoutes = require("./routes/events");
 const orderRoutes = require("./routes/orders");
 const achievementRoutes = require("./routes/achievements");
 const videoRoutes = require("./routes/videos");
+const mediaRoutes = require("./routes/media");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/achievements", achievementRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/media", mediaRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

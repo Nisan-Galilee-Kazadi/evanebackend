@@ -5,32 +5,45 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async (mailOptions) => {
     try {
+        console.log('📤 Tentative d\'envoi d\'email via Resend...');
+        console.log('📍 Destinataire:', mailOptions.to);
+        console.log('📝 Sujet:', mailOptions.subject);
+
         if (!process.env.RESEND_API_KEY) {
-            console.error('❌ RESEND_API_KEY manquant dans les variables d\'environnement');
-            return { success: false, error: 'Configuration email manquante' };
+            console.error('❌ ERREUR CRITIQUE : RESEND_API_KEY est manquante');
+            return { success: false, error: 'Configuration email manquante (RESEND_API_KEY)' };
         }
 
-        const result = await resend.emails.send({
+        const payload = {
             from: mailOptions.from || process.env.EMAIL_FROM || 'Evan Lesnar <onboarding@resend.dev>',
-            to: mailOptions.to,
+            to: Array.isArray(mailOptions.to) ? mailOptions.to : [mailOptions.to],
             subject: mailOptions.subject,
             html: mailOptions.html
-        });
+        };
 
-        console.log('✅ Email envoyé avec succès à:', mailOptions.to);
+        console.log('📡 Envoi de la requête à Resend avec l\'expéditeur:', payload.from);
+
+        const result = await resend.emails.send(payload);
+
+        if (result.error) {
+            console.error('❌ Erreur renvoyée par Resend API:', result.error);
+            return { success: false, error: result.error.message, details: result.error };
+        }
+
+        console.log('✅ Email envoyé avec succès !');
         console.log('📧 Resend ID:', result.data?.id);
         return { success: true, id: result.data?.id };
     } catch (error) {
-        console.error('❌ Erreur d\'envoi d\'email:', {
+        console.error('❌ Erreur EXCEPTIONNELLE d\'envoi d\'email:', {
             to: mailOptions.to,
-            error: error.message,
-            stack: error.stack
+            errorMessage: error.message,
+            errorObject: error
         });
 
         return {
             success: false,
             error: error.message,
-            details: error.response || 'Aucun détail supplémentaire disponible'
+            stack: error.stack
         };
     }
 };

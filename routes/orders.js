@@ -119,14 +119,18 @@ router.post('/', async (req, res) => {
 
         // Send confirmation email if email provided
         if (customerEmail) {
+            console.log(`📧 Lancement de l'email de confirmation pour: ${customerEmail}`);
             await sendOrderConfirmationEmail(customerEmail, baseOrderDetails, instructionsText);
+        } else {
+            console.log('ℹ️ Aucun email fourni par le client, skip confirmation email');
         }
 
         // Notify admin (best-effort). Do not block order creation if email fails.
         try {
+            console.log('📧 Lancement de la notification admin');
             await sendAdminNotificationEmail(baseOrderDetails);
         } catch (emailError) {
-            console.error('Admin notification email error:', emailError);
+            console.error('❌ Admin notification email error:', emailError);
         }
 
         res.status(201).json({
@@ -173,7 +177,10 @@ router.put('/:id/validate', authMiddleware, async (req, res) => {
                 totalAmount: order.totalAmount
             };
 
+            console.log(`📧 Lancement de l'email du Token pour: ${order.customerEmail}`);
             await sendTokenEmail(order.customerEmail, token, orderDetails);
+        } else {
+            console.log('ℹ️ Aucun email client pour l\'envoi du token');
         }
 
         res.json({

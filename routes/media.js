@@ -70,19 +70,58 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// New multer instance with memory storage for processing
+const memoryStorage = multer.memoryStorage();
+const uploadMemory = multer({ storage: memoryStorage });
+
+const { cloudinary } = require('../config/cloudinary');
+const { convertToWebP } = require('../utils/imageProcessor');
+
 // @route   POST /api/media/upload
 // @desc    Upload a media file (image/video) and return public URL
 // @access  Private (Admin)
-router.post('/upload', authMiddleware, upload.single('file'), async (req, res) => {
+router.post('/upload', authMiddleware, uploadMemory.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Aucun fichier reçu' });
     }
-    const publicUrl = req.file.path;
-    res.json({ url: publicUrl });
+
+    let fileBuffer = req.file.buffer;
+    let fileName = req.file.originalname;
+    let folder = 'evan-lesnar';
+
+    // If it's an image, convert to WebP
+    if (req.file.mimetype.startsWith('image/')) {
+      fileBuffer = await convertToWebP(fileBuffer);
+      fileName = fileName.replace(/\.[^/.]+$/, "") + ".webp";
+    }
+
+    // Upload to Cloudinary using stream
+    const uploadFromBuffer = (buffer) => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream(
+          {
+            folder: folder,
+            resource_type: "auto",
+            public_id: path.parse(fileName).name
+          },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        stream.end(buffer);
+      });
+    };
+
+    const result = await uploadFromBuffer(fileBuffer);
+    res.json({ url: result.secure_url });
   } catch (err) {
     console.error('Upload error:', err);
-    res.status(500).json({ error: 'Erreur lors de l\'upload' });
+    res.status(500).json({ error: 'Erreur lors de l\'upload ou de la conversion' });
   }
 });
 

@@ -84,7 +84,7 @@ const sendAdminNotificationEmail = async (orderDetails) => {
                     </div>
                     
                     <div style="margin-top: 25px; text-align: center;">
-                        <a href="${process.env.FRONTEND_URL || 'https://evanlesnar.netlify.app'}/admin/orders" style="display: inline-block; background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: 500;">
+                        <a href="${process.env.FRONTEND_URL || 'https://evanelesnar.netlify.app'}/admin/orders" style="display: inline-block; background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: 500;">
                             Voir la commande dans l'admin
                         </a>
                     </div>
@@ -128,7 +128,7 @@ const sendTokenEmail = async (to, token, orderDetails) => {
                     <div style="background: #1a1a1a; border: 1px solid #dc2626; padding: 15px; border-radius: 5px; margin: 20px 0;">
                         <p style="margin: 0; color: #e5e5e5; font-size: 14px;">
                             <strong style="color: #dc2626;">📱 Pour télécharger votre billet :</strong><br>
-                            Rendez-vous sur <a href="${process.env.FRONTEND_URL || 'https://evanlesnar.netlify.app'}" style="color: #dc2626;">notre site</a> et entrez ce token dans la section "Valider mon token"
+                            Rendez-vous sur <a href="${process.env.FRONTEND_URL || 'https://evanelesnar.netlify.app'}" style="color: #dc2626;">notre site</a> et entrez ce token dans la section "Valider mon token"
                         </p>
                     </div>
                     
@@ -167,7 +167,7 @@ const sendOrderConfirmationEmail = async (to, orderDetails, paymentInstructions)
                 </div>
                 
                 <div style="background: #0a0a0a; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #1a1a1a;">
-                    <h2 style="color: #dc2626; margin-top: 0;">Demande enregistrée ! ✅</h2>
+                    <h2 style="color: #dc2626; margin-top: 0;">Demande enregistrée ! </h2>
                     
                     <p style="color: #e5e5e5; font-size: 16px; line-height: 1.6;">
                         Bonjour <strong style="color: #dc2626;">${orderDetails.customerName}</strong>,

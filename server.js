@@ -11,6 +11,7 @@ const orderRoutes = require("./routes/orders");
 const achievementRoutes = require("./routes/achievements");
 const videoRoutes = require("./routes/videos");
 const mediaRoutes = require("./routes/media");
+const contactRoutes = require("./routes/contact");
 
 const app = express();
 app.enable('trust proxy'); // Required for req.protocol to detect https on Render
@@ -38,6 +39,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/achievements", achievementRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/media", mediaRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

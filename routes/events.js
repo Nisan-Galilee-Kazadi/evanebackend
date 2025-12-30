@@ -16,7 +16,9 @@ router.get('/', async (req, res) => {
         }
 
         if (upcoming === 'true') {
-            query.date = { $gte: new Date() };
+            const startOfDay = new Date();
+            startOfDay.setHours(0, 0, 0, 0);
+            query.date = { $gte: startOfDay };
             query.status = { $ne: 'past' };
         }
 

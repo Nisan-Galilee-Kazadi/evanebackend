@@ -6,7 +6,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const eventsData = [
     {
         title: "Rire Sans Frontières",
-        date: new Date("2025-12-15"),
+        date: new Date("2026-02-15"),
         time: "19:00",
         venue: "Théâtre de la Ville",
         city: "Kinshasa",
@@ -16,11 +16,11 @@ const eventsData = [
             { type: "Standard", price: 15000, currency: "CDF", available: 150, total: 150 },
             { type: "VIP", price: 30000, currency: "CDF", available: 50, total: 50 },
         ],
-        status: "upcoming" // Mapped from 'available'
+        status: "upcoming"
     },
     {
         title: "Comedy Night Special",
-        date: new Date("2025-12-22"),
+        date: new Date("2026-03-22"),
         time: "20:00",
         venue: "Grand Hôtel",
         city: "Lubumbashi",
@@ -34,11 +34,11 @@ const eventsData = [
     },
     {
         title: "Le Rire de Fin d'Année",
-        date: new Date("2025-12-31"),
+        date: new Date("2025-12-31"), // Tomorrow according to user current time 
         time: "21:00",
         venue: "Pullman Hotel",
         city: "Kinshasa",
-        description: "Célébrez le Nouvel An avec Evan Lesnar ! Une soirée inoubliable mêlant humour, musique et festivités.",
+        description: "Célébrez la nouvelle année avec Evan Lesnar ! Une soirée inoubliable mêlant humour, musique et festivités.",
         image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=600&fit=crop",
         tickets: [
             { type: "Standard", price: 20000, currency: "CDF", available: 100, total: 100 },
@@ -49,7 +49,7 @@ const eventsData = [
     },
     {
         title: "Campus Comedy Tour",
-        date: new Date("2026-01-10"),
+        date: new Date("2026-04-10"),
         time: "18:00",
         venue: "Université de Kinshasa",
         city: "Kinshasa",

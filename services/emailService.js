@@ -108,7 +108,7 @@ const sendTokenEmail = async (to, token, orderDetails) => {
                 </div>
                 
                 <div style="background: #0a0a0a; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #1a1a1a;">
-                    <h2 style="color: #dc2626; margin-top: 0;">Votre paiement a été validé ! 🎉</h2>
+                    <h2 style="color: #dc2626; margin-top: 0;">Votre paiement a été validé !</h2>
                     
                     <p style="color: #e5e5e5; font-size: 16px; line-height: 1.6;">
                         Bonjour <strong style="color: #dc2626;">${orderDetails.customerName}</strong>,
@@ -127,7 +127,7 @@ const sendTokenEmail = async (to, token, orderDetails) => {
                     
                     <div style="background: #1a1a1a; border: 1px solid #dc2626; padding: 15px; border-radius: 5px; margin: 20px 0;">
                         <p style="margin: 0; color: #e5e5e5; font-size: 14px;">
-                            <strong style="color: #dc2626;">📱 Pour télécharger votre billet :</strong><br>
+                            <strong style="color: #dc2626;">Pour télécharger votre billet :</strong><br>
                             Rendez-vous sur <a href="${process.env.FRONTEND_URL || 'https://evanelesnar.netlify.app'}" style="color: #dc2626;">notre site</a> et entrez ce token dans la section "Valider mon token"
                         </p>
                     </div>
@@ -136,11 +136,11 @@ const sendTokenEmail = async (to, token, orderDetails) => {
                         <p style="color: #999; font-size: 14px; margin: 5px 0;"><strong style="color: #dc2626;">Événement :</strong> ${orderDetails.eventTitle}</p>
                         <p style="color: #999; font-size: 14px; margin: 5px 0;"><strong style="color: #dc2626;">Date :</strong> ${orderDetails.eventDate}</p>
                         <p style="color: #999; font-size: 14px; margin: 5px 0;"><strong style="color: #dc2626;">Lieu :</strong> ${orderDetails.eventVenue}</p>
-                        <p style="color: #999; font-size: 14px; margin: 5px 0;"><strong style="color: #dc2626;">Total :</strong> ${orderDetails.totalAmount} CDF</p>
+                        <p style="color: #999; font-siz: 14px; margin: 5px 0;"><strong style="color: #dc2626;">Total :</strong> ${orderDetails.totalAmount} CDF</p>
                     </div>
                     
                     <p style="color: #e5e5e5; font-size: 14px; margin-top: 30px;">
-                        À bientôt pour un moment inoubliable ! 🎉
+                        À bientôt pour un moment inoubliable ! 
                     </p>
                     
                     <p style="color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1a1a1a;">
